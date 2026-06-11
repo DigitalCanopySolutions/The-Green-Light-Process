@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Greenlight Process - Tableau de Bord Opérationnel</title>
+    <style>
+        :root {
+            --bg-page: #f4f6f9;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #eff6ff;
+            --accent-orange: #ea580c;
+            --accent-orange-light: #fff7ed;
+            --border-net: #cbd5e1;
+            --border-soft: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 50px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        /* En-tête */
+        header {
+            margin-bottom: 40px;
+            border-left: 6px solid var(--accent-blue);
+            padding-left: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            font-weight: 500;
+        }
+
+        /* Cadre d'explication */
+        .intro-section {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-net);
+            border-radius: 12px;
+            padding: 26px;
+            margin-bottom: 35px;
+        }
+
+        .intro-section p {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .intro-section ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .intro-section li {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            background-color: #f8fafc;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .intro-section li span {
+            color: var(--accent-blue);
+            font-size: 1.2rem;
+        }
+
+        /* Grille des Étapes */
+        .process-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        /* Carte Étape */
+        .step-block {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-net);
+            border-radius: 14px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Colonne Gauche de la Carte */
+        .step-header {
+            background-color: #f8fafc;
+            border-right: 2px solid var(--border-net);
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .step-tag {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-blue);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .step-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .badge-status {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            background-color: #e2e8f0;
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border: 1px solid var(--border-net);
+            width: fit-content;
+        }
+
+        /* Colonne Droite (Contenu) */
+        .step-body {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            background-color: var(--bg-card);
+        }
+
+        .criterion-box {
+            background-color: #ffffff;
+            border: 1px solid var(--border-net);
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .criterion-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            border-bottom: 2px solid var(--border-soft);
+            padding-bottom: 6px;
+        }
+
+        .criterion-title span {
+            color: var(--accent-blue);
+            margin-right: 4px;
+        }
+
+        /* Listes de critères */
+        .list-items {
+            list-style: none;
+        }
+
+        .list-items li {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .list-items li::before {
+            content: "•";
+            color: var(--accent-blue);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Ligne de Transition Phase de Conception / Marché */
+        .phase-transition {
+            background-color: var(--accent-orange-light);
+            border: 2px dashed var(--accent-orange);
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .transition-icon {
+            font-size: 1.5rem;
+        }
+
+        .transition-text {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #9a3412;
+            letter-spacing: -0.01em;
+        }
+
+        .footnote-bottom {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Responsive tablette / mobile */
+        @media (max-width: 850px) {
+            .step-block {
+                grid-template-columns: 1fr;
+            }
+            .step-header {
+                border-right: none;
+                border-bottom: 2px solid var(--border-net);
+                padding: 24px;
+            }
+            .step-body {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <h1>The Greenlight Process</h1>
+            <div class="subtitle">Architecture de validation séquentielle du modèle.</div>
+        </header>
+
+        <section class="intro-section">
+            <p>Le framework structure le projet autour de 4 grandes étapes stratégiques incontournables :</p>
+            <ul>
+                <li><span>1</span> 1. Validation Problème</li>
+                <li><span>2</span> 2. Proposition de Solution</li>
+                <li><span>3</span> 3. Connexion au marché</li>
+                <li><span>4</span> 4. Mise sur le Marché</li>
+            </ul>
+        </section>
+
+        <div class="process-grid">
+
+            <div class="step-block">
+                <div class="step-header">
+                    <div>
+                        <span class="step-tag">Étape 01</span>
+                        <div class="step-title">1. Validation Problème</div>
+                    </div>
+                    <div class="badge-status">Hypothèses requises</div>
+                </div>
+                <div class="step-body">
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>a.</span> Diagnostic de la Douleur (Problème D.U.R)</div>
+                        <ul class="list-items">
+                            <li>i. Douloureux</li>
+                            <li>ii. Urgent</li>
+                            <li>iii. Reconnu</li>
+                        </ul>
+                    </div>
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>b.</span> Cartographie et Potentiel du Marché</div>
+                        <ul class="list-items">
+                            <li>i. Taille du marché</li>
+                            <li>ii. Volume de demande</li>
+                            <li>iii. Segments cibles</li>
+                        </ul>
+                    </div>
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>c.</span> Analyse des Concurrents</div>
+                        <ul class="list-items">
+                            <li>i. Inventaire des alternatives</li>
+                            <li>ii. Documentation des Failles</li>
+                        </ul>
+                    </div>
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>d.</span> Synthèse Stratégique</div>
+                        <ul class="list-items">
+                            <li>i. SWOT du projet</li>
+                            <li>ii. Hypothèse de positionnement</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-block">
+                <div class="step-header">
+                    <div>
+                        <span class="step-tag">Étape 02</span>
+                        <div class="step-title">2. Proposition de Solution</div>
+                    </div>
+                    <div class="badge-status">Hypothèses requises</div>
+                </div>
+                <div class="step-body">
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>a.</span> Architecture de la Solution & Faisabilité technique</div>
+                        <ul class="list-items">
+                            <li>i. Use Case/ Maquette</li>
+                            <li>ii. Identification des failles techniques</li>
+                            <li>iii. Capacité de livraison</li>
+                        </ul>
+                    </div>
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>b.</span> Différenciation & Positionnement Produit</div>
+                        <ul class="list-items">
+                            <li>i. Positionnement final</li>
+                            <li>ii. Analyse de la valeur ajoutée</li>
+                        </ul>
+                    </div>
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>c.</span> Visibilité économique</div>
+                        <ul class="list-items">
+                            <li>i. Price List</li>
+                            <li>ii. Estimation de la marge</li>
+                            <li>iii. Seuil de rentabilité</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase-transition">
+                <span class="transition-icon">➔</span>
+                <div class="transition-text">Fin de la phase de Conception &nbsp;➔&nbsp; Phase de mise sur le marché</div>
+            </div>
+
+            <div class="step-block">
+                <div class="step-header">
+                    <div>
+                        <span class="step-tag">Étape 03</span>
+                        <div class="step-title">3. Connexion au marché</div>
+                    </div>
+                    <div class="badge-status">Hypothèses requises</div>
+                </div>
+                <div class="step-body">
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>a.</span> Stratégie GoToMarket & Canaux d'acquisitions</div>
+                        <ul class="list-items">
+                            <li>i. Sélection des Canaux</li>
+                            <li>ii. Infrastructure de conversion</li>
+                        </ul>
+                    </div>
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>b.</span> Test de Traction</div>
+                        <ul class="list-items">
+                            <li>i. KPIs de Campagne</li>
+                            <li>ii. Validation du message</li>
+                        </ul>
+                    </div>
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>c.</span> Capacité de livraison & Opération</div>
+                        <ul class="list-items">
+                            <li>i. Délais de livraison</li>
+                            <li>ii. Support & Onboarding</li>
+                        </ul>
+                    </div>
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>d.</span> Projection de croissance</div>
+                        <ul class="list-items">
+                            <li>* Analyse et projections</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-block">
+                <div class="step-header">
+                    <div>
+                        <span class="step-tag">Étape 04</span>
+                        <div class="step-title">4. Mise sur le Marché</div>
+                    </div>
+                    <div class="badge-status">Hypothèses requises</div>
+                </div>
+                <div class="step-body">
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>a.</span> Validation de valeur Perçue (Engagement)</div>
+                        <ul class="list-items">
+                            <li>i. Intention réelle de payer</li>
+                            <li>ii. Équilibre gagnant-gagnant</li>
+                        </ul>
+                    </div>
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>b.</span> Performances des Campagnes (KPIs Terminaux)</div>
+                        <ul class="list-items">
+                            <li>i. Indicateurs cléfs</li>
+                            <li>ii. Optimisation du Tunnel</li>
+                        </ul>
+                    </div>
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>c.</span> Logistique de Livraison & Satisfaction</div>
+                        <ul class="list-items">
+                            <li>i. Capacité de délivrance</li>
+                            <li>ii. Support post-achat</li>
+                        </ul>
+                    </div>
+                    <div class="criterion-box">
+                        <div class="criterion-title"><span>d.</span> Bilan "Première Vente"</div>
+                        <ul class="list-items">
+                            <li>i. Encaissement vérifiable</li>
+                            <li>ii. Décision de Scale</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footnote-bottom">
+            * Nécessite la formulation d'hypothèses.
+        </div>
+
+    </div>
+
+</body>
+</html>
